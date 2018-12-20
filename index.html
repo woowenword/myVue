@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        {{message}}
+        <input type="text" v-model="message">
+        <p v-bind:title="cursor">鼠标悬停几秒钟试试看会怎么样？</p>
+        <a v-bind:href="url">去百度</a>
+        **v-，vue提供的特殊特性会在渲染的DOM上应用特殊的响应式行为
+        <p v-if="seen">你能看到我哦</p>
+        **绑定到DOM结构
+        <ul>
+            <li v-for="item in items">{{ item.text }}</li>
+        </ul>
+        **渲染数据
+        <div>
+            <button v-on:click="clickBtn">点击按钮</button>
+            **进行交互v-on添加事件监听
+        </div>
+        <div>
+            <ol>
+                <todo-item v-for='item in items' v-bind:todo='item' v-bind:key='item.id'>
+
+                </todo-item>
+            </ol>
+            **组件
+        </div>
+        <p>生命周期钩子的this上下文指向调用他的vue实例</p>
+        <p v-once>这个值将不会改变： {{ message }}</p>
+        <p>{{rawHtml}}</p>
+        <p v-html='rawHtml'>输出真正的html</p>
+        <button v-bind:disabled='isButtonDisabled' v-on:click="clickBtn">按钮</button>
+        <hr>
+        ***三元表达式
+        <p>{{isButtonDisabled?'yes':'No'}}</p>
+        ***修饰符.prevent  用于指出一个指令应该以特殊方式绑定
+        <div>
+            <h3>任何复杂逻辑度应当使用计算属性</h3>
+            <div>
+                <p>原始信息：“{{ message }}”</p>
+                <p>逆转信息：“{{ reverseMessage }}”</p>
+            </div>
+        </div>
+        <p>{{ fullName }}</p>
+        <div class="static" v-bind:class="{ active:isActive,hasStyle:isshow}">我是class内联样式</div>
+        <div v-bind:class="classObject">使用计算属性</div>
+        <div v-bind:style="color">
+            <a href="./example/v-for.html">v-for循环</a>
+        </div>
+    </div>
+   
+    <script type="text/javascript" src="./assets/js/vue.js"></script>
+    <script>
+
+        Vue.component('todo-item',{
+            props:['todo'],
+            template:'<li>{{ todo.text }}</li>'
+        })
+
+
+        var app = new Vue({
+            el:'#app',
+            data:{//响应试的
+                message:'hello Word!',
+                cursor:'你好哇！！',
+                seen: true,
+                url:'baidu',
+                items:[
+                    {id:1,'text':'hello'},
+                    {id:2,'text':'welcome'},
+                    {id:3,'text':'here'}
+                ],
+                objFreeze:Object.freeze("hello"),//阻止响应式修改
+                rawHtml:'<span></span>',
+                isButtonDisabled: 'disabled',
+                firstName:'李',
+                lastName:'佳',
+                isActive:true,
+                isshow:false,
+                color:'red'
+            },
+            methods:{//方法
+                clickBtn(){
+                    alert('hi')
+                }
+            },
+            created(){//实例被创建完以后--生命周期钩子
+                console.log('实例被创建完成了')
+            },
+            computed:{//计算属性--是基于它们的依赖进行缓存的，只在相关依赖发生改变时，它们才会重新求职
+                reverseMessage: function(){
+                    return this.message.split('').reverse().join('')
+                },
+                fullName:function(){
+                    return this.firstName + this.lastName
+                },
+                classObject:function(){
+                    return {
+                        active: this.isActive
+                    }
+                }
+
+            },
+            watch:{//侦听属性--命令式的--当需要在数据变化时执行异步或开销较大的操作时
+                firstName: function(val){
+                    this.fullName = val + this.lastName
+                },
+                lastName: function(val){
+                    this.fullName = this.firstName + val
+                }
+
+            }
+        })
+        
+
+    
+    </script>
+</body>
+</html>
