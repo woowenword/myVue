@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script type="text/javascript" src="../assets/js/vue.js"></script>
+</head>
+<body>
+    <h1>v-on的用法</h1>
+    <hr>
+    <p>有时也需要在内联语句处理器中访问原始的 DOM 事件。可以用特殊变量 $event 把它传入方法：</p>
+    <div id="app">
+        <button v-on:click="handleCounerFun">Add 1</button>
+        <p>事件修饰符：</p>
+        <button v-on:click.prevent="handleCouterFun2">阻止默认事件</button>
+        <p>内联处理器中的方法：</p>
+        <button v-on:click="handleCouterFun3('hi',$event)">阻止默认事件2</button>
+        <p>The button above has been clicked {{ counter }} times.</p>
+    </div>
+    
+   
+    <script type="text/javascript">
+        var app=new Vue({
+            el:'#app',
+            data:{
+                counter: 0
+            },
+            methods: {
+                handleCounerFun: function(event){
+                    this.counter += 1;
+                    console.log(event && event.target.tagName)//event 是原生Dom事件
+                },
+                handleCouterFun2: function(){
+                    console.log('hello')
+                },
+                handleCouterFun3: function(message,event){
+                    console.log(event);
+                    event && event.preventDefault();
+                    
+                    console.log(message);
+                }
+            },
+        })
+    </script>
+</body>
+</html>
