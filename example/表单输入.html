@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script type="text/javascript" src="../assets/js/vue.js"></script>
+</head>
+<body>
+<h1>表单</h1>
+<hr>
+<p></p>
+<div id="app">
+    <input v-model="content" type="text" placeholder="请输入内容"/>
+    <div>
+        内容：
+        <textarea >{{content}}</textarea>
+    </div>
+    <div>
+        <input type="checkbox" v-model="checked" id="sel" value="1212"/>
+        <label for="sel">{{checked}}</label>
+    </div>
+    <div>
+        <input type="checkbox" id="name1" value="Join" v-model="checkNames">
+        <label for="name1">Join</label>
+        <input type="checkbox" id="name2" value="lisa" v-model="checkNames">
+        <label for="name2">lisa</label>
+        <input type="checkbox" id="name3" value="tom"v-model="checkNames">
+        <label for="name3">tom</label>
+        <div>names:{{checkNames}}</div>
+    </div>
+
+</div>
+
+
+<script type="text/javascript">
+    var app=new Vue({
+        el:'#app',
+        data:{
+            content:"",
+            checked: false,
+            checkNames:[]
+        },
+        methods: {
+
+        },
+    })
+</script>
+</body>
+</html>

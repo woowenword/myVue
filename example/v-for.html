@@ -16,7 +16,15 @@
            </li>
        </ul>
        <ul>
-           <li v-for="(item, index) in items" :key="index">{{item}} - {{index}}</li>
+           排序2：
+           <template v-for="(item2,index) in even(items2)">
+                <li>{{item2}}</li>
+                   <li>位置：{{index}}</li>
+           </template>
+        
+    </ul>
+       <ul>
+           <li v-for="(item, index) in items" :key="item">{{item}} - {{index}}</li>
        </ul>
        <p>用 v-for 通过一个对象的属性来迭代</p>
        <ul>
@@ -27,26 +35,65 @@
        <ul>
            <li v-for="item in evenNumbers">{{item}}</li>
        </ul>
+
+       <p>对象循环输出并添加索引号,并根据年龄进行排序</p>
+       <ul>
+           <!-- <li v-for="student in sortStudent">{{student.name}}的年龄是{{student.age}}</li> -->
+           <li v-for="student in students">{{student.name}}的年龄是{{student.age}}</li>
+       </ul>
     </div>
     <script type="text/javascript">
         var app=new Vue({
             el:'#app',
             data:{
                 items:[20,23,18,65,32,19,54,56,41],
+                items2:[22,23,10,4,89,19,2,55,34],
                 obj:{
                     first: 'hi',
                     second: 'hi2',
                     last: 'hi3'
-                }
+                },
+                students: [
+                    {name: 'tom', age: 23},
+                    {name: 'lisa', age: 20},
+                    {name: 'yoming', age: 18},
+                    {name: 'xingli', age: 30},
+                ]
+
             },
+
             computed: {
                 evenNumbers:function(){
                     return this.items.filter((number) =>{
                         return number%2 === 0;
                     })
+                },
+                sortStudent: function(){
+                    return this.sortKey(this.students,'age')
                 }
+            },
+
+            methods: {
+                even: function(){
+                    return this.items2.filter((num)=>{
+                        return num%2===0
+                    })
+                },
+                sortKey: function(array,key){
+                    return array.sort(function(a,b){
+                        return a[key]-b[key];
+                    })
+                }
+            },
+
+            watch: {
+                
             }
+
         })
+
+        
+
         Vue.set(app.obj, 'add', 'hi4');//为obj 对象添加属性
         app.obj = Object.assign({},app.obj,{//为对象添加多个属性
             school: 'BJ',

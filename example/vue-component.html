@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="myvue">
+        <div>{{ mesg1 }}</div>
+        <div>{{ mesg2 }}</div>
+        <button v-on:click="changeFun">change it</button>
+        <button @click="checkExample">查看实例属性</button>
+        <p>{{ rawhtml }}</p>
+        <p v-html="rawhtml"></p>
+    </div>
+    
+    
+    <script>
+    
+    Vue.component('todo-item',{
+
+    })
+
+    var vm = new Vue({//创建了一个vue实例
+        el: '#myvue',
+        data:{
+            mesg1: '我是没有被冻结的信息1',
+            mesg2: Object.freeze({//Object.freeze冻结一个对象
+                obj:1
+            }),
+            rawhtml: "<span style='color:red'>1212</span>"
+        },
+        beforeCreate () {
+            console.log("vue实例被创建之前调用",new Date().getTime())
+        },
+        created(){//vue实例被创建之后调用
+            console.log('vue实例被创建之后',new Date().getTime())
+        },
+        methods: {
+            changeFun(){
+                alert(1);
+                this.mesg1 = '信息1被改变了';
+                this.mesg2.obj = '2';
+                
+            },
+            checkExample(){
+                console.log(this.$data);
+                console.log(this.$watch,'watch')
+            }
+        },
+        watch: {
+            // mesg1: (newValue,oldValue) =>{
+            //     let _this = this;
+            //     if(newValue != oldValue){
+            //         setTimeout(()=>{
+            //             _this.mesg1 = '信息1在3秒后又恢复了'
+            //         },3000)
+            //     }
+            // },
+            /* 
+            在watch方法中不要使用箭头函数来定义watcher函数，理由是：箭头函数绑定了父级作用域的上下文，this不会按照期望指向vue实例
+             */
+            mesg1: function(newValue,oldValue){
+                if(newValue != oldValue){
+                    setTimeout(()=>{
+                        this.mesg1 = '信息1在3秒后又恢复了'
+                    },3000)
+                }
+            },
+        },
+    })
+    vm.$watch('mesg1',(newValue,oldValue)=>{//不能使用箭头函数，因为this未指向vue实例
+        console.log(this)//指向了window
+        console.log(newValue);
+    })
+    </script>
+</body>
+</html>

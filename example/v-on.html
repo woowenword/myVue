@@ -13,24 +13,33 @@
     <p>有时也需要在内联语句处理器中访问原始的 DOM 事件。可以用特殊变量 $event 把它传入方法：</p>
     <div id="app">
         <button v-on:click="handleCounerFun">Add 1</button>
+        <button v-on:click="handleCounerFun4()">Add 4</button>
         <p>事件修饰符：</p>
         <button v-on:click.prevent="handleCouterFun2">阻止默认事件</button>
         <p>内联处理器中的方法：</p>
         <button v-on:click="handleCouterFun3('hi',$event)">阻止默认事件2</button>
         <p>The button above has been clicked {{ counter }} times.</p>
+
+        <input type="text" v-on:keyup.enter="onEnter" v-model="secondCount" placeholder="请输入数字">
     </div>
     
+    @click.prevent = ""
+    @click="fun($event)"
    
     <script type="text/javascript">
         var app=new Vue({
             el:'#app',
             data:{
-                counter: 0
+                counter: 0,
+                secondCount:''
             },
             methods: {
                 handleCounerFun: function(event){
                     this.counter += 1;
                     console.log(event && event.target.tagName)//event 是原生Dom事件
+                },
+                handleCounerFun4:function(){
+                    alert(1)
                 },
                 handleCouterFun2: function(){
                     console.log('hello')
@@ -40,6 +49,10 @@
                     event && event.preventDefault();
                     
                     console.log(message);
+                },
+                onEnter: function(){
+                    this.counter = 0;
+                    this.counter += parseInt(this.secondCount);
                 }
             },
         })

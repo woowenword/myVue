@@ -1,0 +1,67 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="../assets/css/index.css"></link>
+    <script type="text/javascript" src="../assets/js/vue.js"></script>
+
+</head>
+<body>
+    <div id="comput">
+        <template v-if="ok">
+            <h4>标题</h4>
+            <sub>副标题</sub>
+            <content>
+                <label for="">userName:</label>
+                <input type="text" placeholder="请输入你的用户名">
+            </content>
+        </template>
+        <template v-else>
+            <label for="">email:</label>
+            <input type="text" placeholder="请输入你的email">
+        </template>
+        <button @click="toggleThing">切换</button>
+        <template>
+            <ul>
+                <li v-for="(item,index) in items">{{index}}-{{item}}</li>
+                <li v-for="(value,key,index) in objects">{{value}}--{{key}}--{{index}}</li>
+            </ul> 
+            {{Object.keys(objects)}}
+        </template>
+    </div>
+    <script>
+        var vm = new Vue({
+            el:'#comput',
+            data () {
+                return {
+                    ok: true,
+                    items:[
+                        {'name':'lisa'}, 
+                        {'age':26},
+                        {'from':'china'},
+                        'shchool'
+                    ],
+                    objects:{
+                        num:"001",
+                        type:'文学',
+                        content:'我是内容'
+                    }
+                }
+            }, 
+            methods: {
+                toggleThing:function(){
+                    return this.ok = !this.ok;
+                }
+            }
+        })
+        vm.items.length = 6;//不会响应式更新dom,不会触发视图更新
+        // Vue.set(vm.items,)
+    // 解决：
+    vm.items.splice(6);
+    Vue.set(vm.items,3,'china2');//Vue.set(target,index下角标,value)
+    vm.items.splice(3,1,'china2');//vm.items.splice(index下脚标,howmany,value);
+    </script>
+</body>
+</html>
