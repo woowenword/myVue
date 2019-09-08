@@ -5,15 +5,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <style>
+        .classA{
+            color: aqua;
+        }
+        .classB{
+            color: blueviolet;
+            font-size:20px;
+        }
+        .className{
+            width: 200px;
+            height: 100px;
+            border: 2px solid #890;
+        }
+        .border{
+            border:1px solid #f00;
+        }
+        .width{
+            width: 300px;
+        }
+    </style>
 </head>
 <body>
     <div id="app">
         {{message}}
         <input type="text" v-model="message">
+        <button @click="handleClick">添加至list</button>
+        <ul>
+            <li v-for="item in list">{{item}}</li>
+        </ul>
         <p v-bind:title="cursor">鼠标悬停几秒钟试试看会怎么样？</p>
         <a v-bind:href="url">去百度</a>
         **v-，vue提供的特殊特性会在渲染的DOM上应用特殊的响应式行为
-        <p v-if="seen">你能看到我哦</p>
+        <p v-if="seen">你能看到我哦---区别于v-show:v-show只是通过display 来显示隐藏元素，实际还是存在于dom结构中的。</p>
+        <p>
+            v-if： 判断是否加载，可以减轻服务器的压力，在需要时加载。
+            v-show：调整css dispaly属性，可以使客户端操作更加流畅。
+        </p>
         **绑定到DOM结构
         <ul>
             <li v-for="item in items">{{ item.text }}</li>
@@ -33,8 +61,8 @@
         </div>
         <p>生命周期钩子的this上下文指向调用他的vue实例</p>
         <p v-once>这个值将不会改变： {{ message }}</p>
-        <p>{{rawHtml}}</p>
-        <p v-html='rawHtml'>输出真正的html</p>
+        <p v-text="rawHtml">{{rawHtml}}</p>
+        <p v-html='exportHtml'></p>
         <button v-bind:disabled='isButtonDisabled' v-on:click="clickBtn">按钮</button>
         <hr>
         ***三元表达式
@@ -43,7 +71,7 @@
         <div>
             <h3>任何复杂逻辑度应当使用计算属性</h3>
             <div>
-                <p>原始信息：“{{ message }}”</p>
+                <p v-text="message">原始信息：“{{ message }}”</p>
                 <p>逆转信息：“{{ reverseMessage }}”</p>
             </div>
         </div>
@@ -51,8 +79,37 @@
         <div class="static" v-bind:class="{ active:isActive,hasStyle:isshow}">我是class内联样式</div>
         <div v-bind:class="classObject">使用计算属性</div>
         <div v-bind:style="color">
-            <a href="./example/v-for.html">v-for循环</a>
+            <p><a href="./example/v-for.html">v-for循环</a></p>
+            <p><a href="./example/v-for-list.html">v-for-list列表</a></p>
+            <p><a href="./example/v-on.html">v-on事件监听</a></p>
+            <p><a href="./example/v-show.html">v-show显示隐藏</a></p>
+            <p><a href="./example/vue-component.html">vueComponent组件基础</a></p>
+            <p><a href="./example/v-model.html">v-model</a></p>
+            <p><a href="./example/vue.directive.html">v.directive</p>
+            <p><a href="./example/计算属性.html">计算属性</p>
+            <p><a href="./example/v-if.html">v-if</p>
+            <p><a href="./example/组件.html">v-if</p>
         </div>
+
+        <div>经常使用v-bind绑定css样式</div>
+        在绑定CSS样式是，绑定的值必须在vue中的data属性中进行声明。 1、直接绑定class样式
+
+        <div :class="className">1、绑定classA</div>
+        2、绑定classA并进行判断，在isOK为true时显示样式，在isOk为false时不显示样式。
+        
+        <div :class="{classA:isOk}">2、绑定class中的判断</div>
+        3、绑定class中的数组
+        
+        <div :class="[classA,classB]">3、绑定class中的数组</div>
+        4、绑定class中使用三元表达式判断
+        
+        <div :class="isOk?classA:classB">4、绑定class中的三元表达式判断</div>
+        5、绑定style
+        
+        <div :style="{color:'#999',fontSize:16}">5、绑定style</div>
+        6、用对象绑定style样式
+        
+        <div :style="styleObject">6、用对象绑定style样式</div>
     </div>
    
     <script type="text/javascript" src="./assets/js/vue.js"></script>
@@ -68,6 +125,7 @@
             el:'#app',
             data:{//响应试的
                 message:'hello Word!',
+                list:[],
                 cursor:'你好哇！！',
                 seen: true,
                 url:'baidu',
@@ -78,16 +136,33 @@
                 ],
                 objFreeze:Object.freeze("hello"),//阻止响应式修改
                 rawHtml:'<span></span>',
+                exportHtml: '<h4>我是标题</h4>',
                 isButtonDisabled: 'disabled',
                 firstName:'李',
                 lastName:'佳',
                 isActive:true,
                 isshow:false,
-                color:'red'
+                color:'red',
+                styleObject:{
+                    fontSize:'24px',
+                    color:'green'
+                },
+                isOk: true,
+                classA: 'classA',
+                classB: 'classB',
+                className: 'border width'
+                
+            
+        
             },
             methods:{//方法
                 clickBtn(){
                     alert('hi')
+                },
+                handleClick(){
+                    console.log(this.message);
+                    this.list.push(this.message);
+                    this.message = "";
                 }
             },
             created(){//实例被创建完以后--生命周期钩子
